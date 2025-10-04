@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สรุปข้อมูลฝ่ายซ่อมบำรุง - กันยายน 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f1f5f9; /* slate-100 */
+        }
+        .gemini-output h4 {
+            font-weight: bold;
+            color: #1e293b; /* slate-800 */
+            margin-top: 0.5rem;
+        }
+        .gemini-output ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+        .gemini-output li {
+            margin-bottom: 0.5rem;
+        }
+        .loader {
+            border: 4px solid #e2e8f0; /* slate-200 */
+            border-top: 4px solid #475569; /* slate-600 */
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+    <div class="container mx-auto p-4 sm:p-6 md:p-8">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-700">#สรุปข้อมูล</h1>
+            <h2 class="text-2xl md:text-3xl font-bold text-slate-600">ผลการดำเนินงานฝ่ายซ่อมบำรุง</h2>
+            <p class="text-lg text-slate-500">ประจำเดือนกันยายน 2025</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Preventive Maintenance (PM) Section -->
+            <div id="pm-card" class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 flex flex-col card">
+                <div class="flex-grow">
+                    <div class="flex items-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-slate-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                        </svg>
+                        <h3 class="text-2xl font-bold text-slate-800">การบำรุงรักษาเชิงป้องกัน (PM)</h3>
+                    </div>
+
+                    <!-- PM Stats -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 text-center">
+                        <div class="bg-slate-50 p-4 rounded-lg border">
+                            <p class="text-3xl font-bold text-slate-600">97</p>
+                            <p class="text-sm text-slate-500">งานทั้งหมด</p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                            <p class="text-3xl font-bold text-green-600">93</p>
+                            <p class="text-sm text-green-500">ปกติ</p>
+                        </div>
+                        <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                            <p class="text-3xl font-bold text-yellow-600">3</p>
+                            <p class="text-sm text-yellow-500">เฝ้าระวัง</p>
+                        </div>
+                         <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                            <p class="text-3xl font-bold text-red-600">1</p>
+                            <p class="text-sm text-red-500">ผิดปกติ</p>
+                        </div>
+                    </div>
+
+                    <!-- PM Details -->
+                    <div class="space-y-4">
+                        <div id="pm-abnormal" class="p-4 rounded-lg bg-red-50 border border-red-200">
+                            <p class="font-bold text-red-700">สถานะ "ผิดปกติ" (แก้ไขแล้ว)</p>
+                            <p class="text-sm text-slate-600 mt-1"><b>อุปกรณ์:</b> Generator (บจก. ลักธณ์ธนากุล) <br><b>ปัญหา:</b> ขั้วแบตเตอรี่อาร์กและเกิดออกไซด์ <br><b>การดำเนินการ:</b> แก้ไขและทดสอบเรียบร้อย</p>
+                        </div>
+                        <div id="pm-watchlist" class="p-4 rounded-lg bg-yellow-50 border border-yellow-200">
+                            <p class="font-bold text-yellow-700">สถานะ "เฝ้าระวัง" (เตรียมความพร้อม)</p>
+                            <p class="text-sm text-slate-600 mt-1"><b>สถานที่:</b> บจก. ธนากุลพันธุ์สัตว์ (โรงเรือน 8) <br><b>ภาพรวม:</b> เป็นการตรวจสอบระบบก่อนรับลูกไก่ พบประเด็นเล็กน้อยและแก้ไขเรียบร้อยแล้วทั้งหมด</p>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Gemini Feature Section -->
+                <div class="mt-6 pt-4 border-t border-slate-200">
+                    <button id="generate-pm-recommendations" class="w-full bg-slate-700 text-white font-bold py-2 px-4 rounded-lg hover:bg-slate-800 transition duration-300 flex items-center justify-center">
+                        <span class="mr-2">✨</span> สร้างข้อเสนอแนะเชิงรุก
+                    </button>
+                    <div id="pm-recommendations-output" class="mt-4 text-sm text-slate-700 bg-slate-50 p-4 rounded-lg border border-slate-200" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Work Orders Section -->
+            <div id="wo-card" class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 flex flex-col card">
+                <div class="flex-grow">
+                    <div class="flex items-center mb-4">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-slate-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        <h3 class="text-2xl font-bold text-slate-800">รายงานการแจ้งซ่อม (Work Orders)</h3>
+                    </div>
+                    
+                    <!-- Work Order Stats -->
+                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6 text-center">
+                        <div class="bg-slate-50 p-4 rounded-lg border">
+                            <p class="text-3xl font-bold text-slate-600">63</p>
+                            <p class="text-sm text-slate-500">งานทั้งหมด</p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                            <p class="text-3xl font-bold text-green-600">47</p>
+                            <p class="text-sm text-green-500">ปิดงานแล้ว</p>
+                        </div>
+                        <div class="bg-orange-50 p-4 rounded-lg border border-orange-200">
+                            <p class="text-3xl font-bold text-orange-600">15</p>
+                            <p class="text-sm text-orange-500">กำลังซ่อม</p>
+                        </div>
+                         <div class="bg-gray-100 p-4 rounded-lg border">
+                            <p class="text-3xl font-bold text-gray-500">1</p>
+                            <p class="text-sm text-gray-500">รอรับงาน</p>
+                        </div>
+                    </div>
+
+                    <!-- WO Details -->
+                    <div class="space-y-4">
+                         <div id="wo-pending" class="p-4 rounded-lg bg-orange-50 border border-orange-200">
+                            <p class="font-bold text-orange-700">ประเด็นงานค้าง</p>
+                            <p class="text-sm text-slate-600 mt-1"><b>กำลังซ่อม:</b> ส่วนใหญ่เป็นงานเตรียมความพร้อมที่ "เล้า 9" ก่อนรับลูกไก่ <br><b>รอรับงาน:</b> งานติดตั้งถังนม ของ บจก. เอส.เอ. แดรี่ฟาร์ม</p>
+                        </div>
+                        <div id="wo-top5" class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                            <p class="font-bold text-slate-700">5 อันดับระบบที่แจ้งซ่อมสูงสุด</p>
+                            <ol class="list-decimal list-inside text-sm text-slate-600 mt-1 space-y-1">
+                                <li><b>Feeding System</b> (ระบบให้อาหาร)</li>
+                                <li><b>Ventilation System</b> (ระบบระบายอากาศ)</li>
+                                <li>Accessory (อุปกรณ์เสริม)</li>
+                                <li>Manure Conveyor (ระบบสายพานลำเลียงมูล)</li>
+                                <li>Water System (ระบบน้ำ)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Gemini Feature Section -->
+                <div class="mt-6 pt-4 border-t border-slate-200">
+                    <button id="generate-wo-recommendations" class="w-full bg-slate-700 text-white font-bold py-2 px-4 rounded-lg hover:bg-slate-800 transition duration-300 flex items-center justify-center">
+                       <span class="mr-2">✨</span> สร้างข้อเสนอแนะเชิงรุก
+                    </button>
+                    <div id="wo-recommendations-output" class="mt-4 text-sm text-slate-700 bg-slate-50 p-4 rounded-lg border border-slate-200" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const pmButton = document.getElementById('generate-pm-recommendations');
+        const pmOutput = document.getElementById('pm-recommendations-output');
+        const woButton = document.getElementById('generate-wo-recommendations');
+        const woOutput = document.getElementById('wo-recommendations-output');
+
+        const apiKey = ""; // API key will be injected by the environment.
+
+        async function callGeminiAPI(prompt, outputElement) {
+            outputElement.style.display = 'block';
+            outputElement.innerHTML = '<div class="loader"></div>';
+            
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (text) {
+                    // Simple markdown to HTML conversion
+                    let html = text
+                        .replace(/\*\*(.*?)\*\*/g, '<h4>$1</h4>') // Bold to h4
+                        .replace(/\* (.*?)(?=\n\*|\n\n|$)/g, '<li>$1</li>'); // List items
+                    html = '<ul>' + html.replace(/<\/li><li>/g, '</li><li>') + '</ul>';
+                    html = html.replace(/<\/li>\n/g, '</li>');
+                    outputElement.innerHTML = html;
+
+                } else {
+                    outputElement.innerHTML = 'ไม่สามารถสร้างข้อเสนอแนะได้ในขณะนี้';
+                }
+            } catch (error) {
+                console.error("Error calling Gemini API:", error);
+                outputElement.innerHTML = `เกิดข้อผิดพลาด: ${error.message}`;
+            }
+        }
+
+        pmButton.addEventListener('click', () => {
+            const abnormalText = document.getElementById('pm-abnormal').innerText;
+            const watchlistText = document.getElementById('pm-watchlist').innerText;
+            
+            const prompt = `
+                As a maintenance manager, analyze this Preventive Maintenance (PM) report and provide 3 actionable recommendations in bullet points.
+                Focus on the root cause of the "abnormal" issue and how to prevent "watchlist" items from escalating. Keep it concise.
+                The response should be in Thai.
+
+                Report Data:
+                - ${abnormalText.replace(/\n/g, ' ')}
+                - ${watchlistText.replace(/\n/g, ' ')}
+            `;
+            callGeminiAPI(prompt, pmOutput);
+        });
+
+        woButton.addEventListener('click', () => {
+            const pendingText = document.getElementById('wo-pending').innerText;
+            const top5Text = document.getElementById('wo-top5').innerText;
+
+            const prompt = `
+                As a reliability engineer, analyze this Work Order (WO) report.
+                1. Suggest one long-term strategic improvement for each of the top 2 recurring issues (Feeding System and Ventilation System) to reduce failures.
+                2. Briefly state the priority for the pending work orders.
+                Provide the analysis in bullet points and in Thai language.
+
+                Report Data:
+                - ${pendingText.replace(/\n/g, ' ')}
+                - Top 5 Issues: ${top5Text.replace("5 อันดับระบบที่แจ้งซ่อมสูงสุด\n", "").replace(/\n/g, ", ")}
+            `;
+            callGeminiAPI(prompt, woOutput);
+        });
+    </script>
+
+</body>
+</html>
+
