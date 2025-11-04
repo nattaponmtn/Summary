@@ -1,143 +1,185 @@
-import React from "react";
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายงานผลการดำเนินงานฝ่ายซ่อมบำรุง (ต.ค. 2025)</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* This style block is intentionally left minimal as requested. */
+    </style>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sarabun: ['Sarabun', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-100 font-sarabun text-slate-800">
 
-export default function MaintenanceSummaryReport() {
-  return (
-    <div className="bg-white text-gray-900 min-h-screen font-sans p-12 max-w-5xl mx-auto leading-relaxed">
-      {/* Header */}
-      <header className="border-b-2 border-gray-300 pb-4 mb-8 text-center">
-        <h1 className="text-4xl font-extrabold tracking-tight text-gray-800 mb-1">
-          รายงานสรุปผลการดำเนินงานฝ่ายซ่อมบำรุง
-        </h1>
-        <p className="text-base text-gray-600">
-          ประจำเดือนตุลาคม 2025 &nbsp;|&nbsp; วันที่ออกรายงาน: 4 พฤศจิกายน 2025
-        </p>
-      </header>
-
-      {/* Overview Summary */}
-      <section className="mb-10">
-        <h2 className="text-2xl font-semibold mb-3 text-gray-800 border-l-4 border-blue-500 pl-3">
-          สรุปภาพรวม
-        </h2>
-        <table className="w-full border border-gray-300 text-sm">
-          <thead className="bg-gray-100 text-gray-700">
-            <tr>
-              <th className="border p-2">รายการ</th>
-              <th className="border p-2 text-center">จำนวนงาน</th>
-              <th className="border p-2">หมายเหตุ</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="hover:bg-gray-50">
-              <td className="border p-2">งานทั้งหมด (รวมทุกประเภท)</td>
-              <td className="border p-2 text-center font-medium">168</td>
-              <td className="border p-2">-</td>
-            </tr>
-            <tr className="hover:bg-gray-50">
-              <td className="border p-2">งานที่เสร็จสิ้น</td>
-              <td className="border p-2 text-center font-medium text-green-700">159</td>
-              <td className="border p-2">-</td>
-            </tr>
-            <tr className="hover:bg-gray-50">
-              <td className="border p-2">อยู่ระหว่างดำเนินการ</td>
-              <td className="border p-2 text-center font-medium text-orange-600">9</td>
-              <td className="border p-2">เร่งดำเนินการโรงเรือน 4</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      {/* Work Orders Section */}
-      <section className="mb-10">
-        <h2 className="text-2xl font-semibold mb-3 text-gray-800 border-l-4 border-blue-500 pl-3">
-          รายงานการแจ้งซ่อม (Work Orders)
-        </h2>
-        <table className="w-full border border-gray-300 text-sm">
-          <thead className="bg-gray-100 text-gray-700">
-            <tr>
-              <th className="border p-2">สถานะ</th>
-              <th className="border p-2 text-center">จำนวนงาน</th>
-              <th className="border p-2">หมายเหตุ</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="hover:bg-gray-50">
-              <td className="border p-2">งานทั้งหมด</td>
-              <td className="border p-2 text-center">37</td>
-              <td className="border p-2">-</td>
-            </tr>
-            <tr className="hover:bg-gray-50">
-              <td className="border p-2">ปิดงานแล้ว</td>
-              <td className="border p-2 text-center text-green-700 font-medium">35</td>
-              <td className="border p-2">-</td>
-            </tr>
-            <tr className="hover:bg-gray-50">
-              <td className="border p-2">กำลังซ่อม</td>
-              <td className="border p-2 text-center text-orange-600 font-medium">2</td>
-              <td className="border p-2">โรงเรือน 4 และ 9</td>
-            </tr>
-            <tr className="hover:bg-gray-50">
-              <td className="border p-2">รอรับงาน</td>
-              <td className="border p-2 text-center text-gray-500">0</td>
-              <td className="border p-2">-</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div className="mt-4 bg-gray-50 p-4 border border-gray-200 rounded">
-          <p className="font-medium text-gray-800 mb-2">5 อันดับระบบที่แจ้งซ่อมสูงสุด</p>
-          <ol className="list-decimal list-inside text-sm text-gray-700 space-y-1">
-            <li>Biosecurity System</li>
-            <li>Lighting System</li>
-            <li>Water System</li>
-            <li>Accessory</li>
-            <li>Feeding System</li>
-          </ol>
+    <header class="bg-white shadow-sm border-b border-slate-200">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-5">
+            <h1 class="text-3xl font-bold text-slate-800">รายงานสรุปผลการดำเนินงานฝ่ายซ่อมบำรุง</h1>
+            <p class="text-lg text-slate-500">ประจำเดือนตุลาคม 2025 (1 - 31 ต.ค. 2025)</p>
         </div>
-      </section>
+    </header>
 
-      {/* Preventive Maintenance */}
-      <section className="mb-10">
-        <h2 className="text-2xl font-semibold mb-3 text-gray-800 border-l-4 border-blue-500 pl-3">
-          การบำรุงรักษาเชิงป้องกัน (Preventive Maintenance: PM)
-        </h2>
-        <table className="w-full border border-gray-300 text-sm">
-          <thead className="bg-gray-100 text-gray-700">
-            <tr>
-              <th className="border p-2">สถานะ</th>
-              <th className="border p-2 text-center">จำนวนงาน</th>
-              <th className="border p-2">หมายเหตุ</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="hover:bg-gray-50">
-              <td className="border p-2">งานทั้งหมด</td>
-              <td className="border p-2 text-center">131</td>
-              <td className="border p-2">-</td>
-            </tr>
-            <tr className="hover:bg-gray-50">
-              <td className="border p-2">ปกติ</td>
-              <td className="border p-2 text-center text-green-700 font-medium">124</td>
-              <td className="border p-2">-</td>
-            </tr>
-            <tr className="hover:bg-gray-50">
-              <td className="border p-2">เฝ้าระวัง</td>
-              <td className="border p-2 text-center text-yellow-600 font-medium">1</td>
-              <td className="border p-2">Fire Protection - ถังดับเพลิงเกจตก</td>
-            </tr>
-            <tr className="hover:bg-gray-50">
-              <td className="border p-2">ผิดปกติ</td>
-              <td className="border p-2 text-center text-red-600 font-medium">6</td>
-              <td className="border p-2">Refrigeration, CIP, Generator</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
+    <main class="container mx-auto max-w-5xl p-4 sm:px-6 lg:px-8 py-8">
+        
+        
+        <section class="mb-10">
+            <h2 class="text-2xl font-semibold mb-4 text-slate-700 border-b pb-2 border-slate-300">
+                1. สรุปข้อมูลใบแจ้งซ่อม (Work Orders)
+            </h2>
 
-      {/* Footer */}
-      <footer className="border-t-2 border-gray-300 pt-4 text-sm text-gray-600 text-center">
-        <p className="mb-1">ผู้จัดทำ: ทีมซ่อมบำรุง</p>
-        <p>© 2025 ฝ่ายซ่อมบำรุง — เอกสารภายในองค์กร</p>
-      </footer>
-    </div>
-  );
-}
+            
+            <h3 class="text-xl font-semibold text-slate-600 mb-3">1.1 ภาพรวมและตัวชี้วัดหลัก (KPIs)</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white p-4 rounded-lg shadow border-l-4 border-indigo-500">
+                    <h4 class="text-sm font-semibold text-slate-500 uppercase">งานซ่อมทั้งหมด</h4>
+                    <p class="text-3xl font-bold text-slate-900">37</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow border-l-4 border-green-600">
+                    <h4 class="text-sm font-semibold text-slate-500 uppercase">ปิดงาน (Closed)</h4>
+                    <p class="text-3xl font-bold text-green-600">35 <span class="text-lg text-slate-500">(94.59%)</span></p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow border-l-4 border-yellow-500">
+                    <h4 class="text-sm font-semibold text-slate-500 uppercase">กำลังซ่อม (In Progress)</h4>
+                    <p class="text-3xl font-bold text-yellow-600">2 <span class="text-lg text-slate-500">(5.41%)</span></p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow border-l-4 border-slate-400">
+                    <h4 class="text-sm font-semibold text-slate-500 uppercase">รอรับงาน (Pending)</h4>
+                    <p class="text-3xl font-bold text-slate-900">0</p>
+                </div>
+            </div>
+
+            
+            <h3 class="text-xl font-semibold text-slate-600 mb-3">1.2 รายละเอียดงานคงค้าง (In Progress Details)</h3>
+            <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+                <p class="text-slate-600 mb-3">สำหรับงานที่กำลังดำเนินการ 2 รายการ เป็นงานที่ต้องใช้เวลาและมีการวางแผนต่อเนื่อง ได้แก่:</p>
+                <ul class="list-disc list-inside space-y-2 text-slate-700">
+                    <li><b>โรงเรือน 4:</b> กำลังเร่งดำเนินการซ่อมแซม คาดว่าจะแล้วเสร็จโดยเร็ว</li>
+                    <li><b>โรงเรือน 9:</b> อยู่ในแผนที่จะเข้าไปเก็บงานต่อทันทีหลังจากจบงานที่โรงเรือน 4</li>
+                    <li><b>โรงเรือน 2:</b> เข้าดำเนินการต่อโรงเรือน 9</li>
+                </ul>
+            </div>
+
+            
+            <h3 class="text-xl font-semibold text-slate-600 mb-3">1.3 สัดส่วนและแนวโน้มการแจ้งซ่อม</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h4 class="text-lg font-semibold mb-3 text-slate-800">สัดส่วนตามบริษัท</h4>
+                    <p class="text-sm text-slate-500 mb-3">การแจ้งซ่อมส่วนใหญ่มาจาก บริษัท ลักษ์ธนากุล จำกัด</p>
+                    <ul class="list-inside space-y-2">
+                        <li class="flex justify-between"><span>บริษัท ลักษ์ธนากุล จำกัด:</span> <span class="font-semibold">62.2%</span></li>
+                        <li class="flex justify-between"><span>บริษัท ธนากุลพันธุ์สัตว์ จำกัด:</span> <span class="font-semibold">21.6%</span></li>
+                        <li class="flex justify-between"><span>บริษัท เอส.เอ. แดรี่ฟาร์ม จำกัด:</span> <span class="font-semibold">10.8%</span></li>
+                        <li class="flex justify-between"><span>บริษัท ซัคเซสมิลค์ จำกัด:</span> <span class="font-semibold">5.4%</span></li>
+                    </ul>
+                </div>
+
+                
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h4 class="text-lg font-semibold mb-3 text-slate-800">5 อันดับระบบที่มีการแจ้งซ่อมสูงสุด</h4>
+                    <ol class="list-decimal list-inside space-y-2 text-slate-700">
+                        <li class="font-medium">Biosecurity System</li>
+                        <li class="font-medium">Lighting System</li>
+                        <li class="font-medium">Water System</li>
+                        <li class="font-medium">Accessory (อุปกรณ์ประกอบ)</li>
+                        <li class="font-medium">Feeding System</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        
+        <section>
+            <h2 class="text-2xl font-semibold mb-4 text-slate-700 border-b pb-2 border-slate-300">
+                2. สรุปผลการตรวจเช็คตามแผน (Preventive Maintenance - PM)
+            </h2>
+
+            
+            <h3 class="text-xl font-semibold text-slate-600 mb-3">2.1 ภาพรวมและตัวชี้วัดหลัก (KPIs)</h3>
+            <p class="text-slate-600 mb-3">ในเดือนนี้ ฝ่ายซ่อมบำรุงได้เพิ่มการเข้าตรวจเช็ค PM ตามแผนมากขึ้น 33 รายการเมื่อเทียบกับเดือนก่อนหน้า</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white p-4 rounded-lg shadow border-l-4 border-indigo-500">
+                    <h4 class="text-sm font-semibold text-slate-500 uppercase">งาน PM ทั้งหมด</h4>
+                    <p class="text-3xl font-bold text-slate-900">130</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow border-l-4 border-green-600">
+                    <h4 class="text-sm font-semibold text-slate-500 uppercase">สถานะ ปกติ</h4>
+                    <p class="text-3xl font-bold text-green-600">124 <span class="text-lg text-slate-500">(95.38%)</span></p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow border-l-4 border-yellow-500">
+                    <h4 class="text-sm font-semibold text-slate-500 uppercase">สถานะ เฝ้าระวัง</h4>
+                    <p class="text-3xl font-bold text-yellow-600">1 <span class="text-lg text-slate-500">(0.77%)</span></p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow border-l-4 border-red-600">
+                    <h4 class="text-sm font-semibold text-slate-500 uppercase">สถานะ ผิดปกติ</h4>
+                    <p class="text-3xl font-bold text-red-600">5 <span class="text-lg text-slate-500">(3.85%)</span></p>
+                </div>
+            </div>
+
+            
+            <h3 class="text-xl font-semibold text-slate-600 mb-3">2.2 รายการที่ต้องให้ความสำคัญ (Priority List)</h3>
+            <p class="text-slate-600 mb-4">จากการตรวจเช็ค PM พบรายการที่ต้องติดตามอย่างเร่งด่วน 6 รายการ (ผิดปกติ 5 รายการ และเฝ้าระวัง 1 รายการ) โดยมีรายละเอียดดังนี้:</p>
+            
+            <div class="space-y-4">
+                
+                <div class="p-4 rounded-lg border-l-4 border-red-500 bg-red-50 shadow-sm">
+                    <span class="px-3 py-1 text-xs font-bold text-white bg-red-500 rounded-full">ผิดปกติ</span>
+                    <h4 class="font-semibold text-lg text-slate-900 mt-2">บริษัท ซัคเซสมิลค์ จำกัด (2 รายการ)</h4>
+                    <ul class="list-disc list-inside mt-2 text-slate-700 space-y-1">
+                        <li><b>Refrigeration:</b> Control Panel-อุณหภูมิอุปกรณ์สูง</li>
+                        <li><b>Cleaning In Place (CIP):</b> Control Panel-ตัวควบคุมอุณหภูมิ Heater 6 เสีย</li>
+                    </ul>
+                    <p class="mt-2 text-sm font-medium text-slate-600"><span class="font-bold">การดำเนินการ:</span> ได้แก้ไขเรียบร้อยแล้ว อยู่ระหว่างการติดตาม</p>
+                </div>
+                
+                
+                <div class="p-4 rounded-lg border-l-4 border-yellow-500 bg-yellow-50 shadow-sm">
+                    <span class="px-3 py-1 text-xs font-bold text-slate-900 bg-yellow-400 rounded-full">เฝ้าระวัง</span>
+                    <h4 class="font-semibold text-lg text-slate-900 mt-2">บริษัท ซัคเซสมิลค์ จำกัด (1 รายการ)</h4>
+                    <ul class="list-disc list-inside mt-2 text-slate-700 space-y-1">
+                        <li><b>Generator (ห้องGEN):</b> Generator-AGG-C200D5...</li>
+                    </ul>
+                    <p class="mt-2 text-sm font-medium text-slate-600"><span class="font-bold">ปัญหา:</span> ตรวจพบขี้เกลือขึ้นบริเวณขั้วแบตเตอรี่</D>
+                    <p class="mt-1 text-sm font-medium text-slate-600"><span class="font-bold">การดำเนินการ:</span> ได้ทำความสะอาดและตรวจสอบเพื่อป้องกันปัญหาการสตาร์ทในอนาคต</p>
+                </div>
+
+                
+                <div class="p-4 rounded-lg border-l-4 border-red-500 bg-red-50 shadow-sm">
+                    <span class="px-3 py-1 text-xs font-bold text-white bg-red-500 rounded-full">ผิดปกติ</span>
+                    <h4 class="font-semibold text-lg text-slate-900 mt-2">บริษัท ลักษณ์ธนากุล จำกัด (2 รายการ)</h4>
+                    <ul class="list-disc list-inside mt-2 text-slate-700 space-y-1">
+                        <li><b>Fire Protection (บ้านพักหัวห...):</b> ถังดับเพลิง 1-ชนิดแคลมป์ 15 ปอนด์</li>
+                        <li><b>Fire Protection (โรงเรือน1):</b> ถังดับเพลิง 1-ชนิดแคลมป์ 10 ปอนด์</li>
+                    </ul>
+                    <p class="mt-2 text-sm font-medium text-slate-600"><span class="font-bold">ปัญหา:</span> ตรวจพบถังดับเพลิงมีแรงดัน (เกจ) ตก ทั้ง 2 จุด</p>
+                    <p class="mt-1 text-sm font-medium text-slate-600"><span class="font-bold">การดำเนินการ:</span> ดำเนินการแจ้ง จป.วิชาชีพ</p>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="text-center py-6 mt-10 border-t border-slate-200">
+        <p class="text-sm text-slate-500">Maintenance Department Report | October 2025</p>
+    </footer>
+
+</body>
+</html>
