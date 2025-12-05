@@ -3,183 +3,676 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>รายงานผลการดำเนินงานฝ่ายซ่อมบำรุง (ต.ค. 2025)</title>
-    
+    <title>รายงานสรุปผลการดำเนินงานฝ่ายซ่อมบำรุง (พ.ย. - ธ.ค. 2025)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
-    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* This style block is intentionally left minimal as requested. */
-    </style>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sarabun: ['Sarabun', 'sans-serif']
-                    }
-                }
-            }
+        body { font-family: 'Sarabun', sans-serif; background-color: #f1f5f9; color: #334155; }
+        .glossary-text { font-size: 0.75rem; color: #64748b; }
+        .card-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); }
+        .fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
+        .fade-enter-from, .fade-leave-to { opacity: 0; }
+        
+        /* Custom Scrollbar for better look */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        @media print {
+            body { background-color: white; }
+            .no-print { display: none !important; }
+            .shadow-xl { box-shadow: none !important; }
+            .bg-slate-900 { background-color: #1e293b !important; color: white !important; print-color-adjust: exact; }
+            .print-break-inside-avoid { break-inside: avoid; }
         }
-    </script>
+    </style>
 </head>
-<body class="bg-slate-100 font-sarabun text-slate-800">
+<body>
+    <div id="app" class="p-2 md:p-8 print:p-0 min-h-screen">
+        
+        <div class="max-w-6xl mx-auto bg-white min-h-[90vh] shadow-xl rounded-xl overflow-hidden print:shadow-none print:rounded-none">
 
-    <header class="bg-white shadow-sm border-b border-slate-200">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-5">
-            <h1 class="text-3xl font-bold text-slate-800">รายงานสรุปผลการดำเนินงานฝ่ายซ่อมบำรุง</h1>
-            <p class="text-lg text-slate-500">ประจำเดือนตุลาคม 2025 (1 - 31 ต.ค. 2025)</p>
+            <!-- Header Section -->
+            <header class="bg-slate-900 text-white transition-colors duration-500">
+                
+                <!-- Top Bar: View Switcher -->
+                <div class="bg-black/20 px-4 md:px-8 py-3 flex flex-col md:flex-row justify-between items-center gap-3 border-b border-white/10 no-print">
+                    <span class="text-[10px] uppercase font-bold tracking-widest text-white/60">View Mode:</span>
+                    
+                    <div class="flex bg-white/10 rounded-lg p-1 overflow-x-auto">
+                        <button 
+                            @click="currentView = 'overview'"
+                            class="px-4 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap"
+                            :class="currentView === 'overview' ? 'bg-white text-slate-900 shadow-sm' : 'text-white/70 hover:text-white hover:bg-white/5'"
+                        >
+                            <i data-lucide="layout-dashboard" class="w-3 h-3"></i> ภาพรวม
+                        </button>
+                        <button 
+                            @click="currentView = 'wo'"
+                            class="px-4 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap"
+                            :class="currentView === 'wo' ? 'bg-white text-slate-900 shadow-sm' : 'text-white/70 hover:text-white hover:bg-white/5'"
+                        >
+                            <i data-lucide="wrench" class="w-3 h-3"></i> Work Orders
+                        </button>
+                        <button 
+                            @click="currentView = 'pm'"
+                            class="px-4 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap"
+                            :class="currentView === 'pm' ? 'bg-white text-slate-900 shadow-sm' : 'text-white/70 hover:text-white hover:bg-white/5'"
+                        >
+                            <i data-lucide="clipboard-check" class="w-3 h-3"></i> PM Check
+                        </button>
+                        <div class="w-px h-4 bg-white/20 mx-1 self-center"></div>
+                        <button 
+                            @click="currentView = 'action_plan'"
+                            class="px-4 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap"
+                            :class="currentView === 'action_plan' ? 'bg-indigo-500 text-white shadow-sm ring-1 ring-white/20' : 'text-indigo-200 hover:text-white hover:bg-white/5'"
+                        >
+                            <i data-lucide="calendar-range" class="w-3 h-3"></i> Action Plan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Header Content (Dynamic based on View) -->
+                <div class="p-8 md:p-10">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                        <!-- Left: Report Title -->
+                        <div>
+                            <div class="flex items-center gap-2 mb-2 opacity-80">
+                                <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
+                                <span class="text-xs uppercase tracking-wider font-semibold">Maintenance Department Report</span>
+                            </div>
+                            <h1 class="text-2xl md:text-3xl font-bold tracking-tight mb-2 leading-tight">
+                                {{ currentView === 'action_plan' ? 'แผนการดำเนินงาน (Action Plan)' : 'รายงานสรุปผลการดำเนินงาน' }}
+                            </h1>
+                            <p class="text-slate-300 font-light text-sm">
+                                ประจำเดือน: {{ currentView === 'action_plan' ? 'ธันวาคม 2025' : reportMonth }}
+                            </p>
+                        </div>
+
+                        <!-- Right: Summary Badges -->
+                        <div class="text-left md:text-right border-l-2 md:border-l-0 md:border-r-2 border-white/20 pl-6 md:pl-0 md:pr-6 w-full md:w-auto">
+                            <h2 class="text-xl font-semibold">Maintenance Team</h2>
+                            <p class="text-sm text-slate-300 mt-1">Maintenance & Reliability</p>
+                            <div class="mt-4 flex gap-2 md:justify-end no-print">
+                                <button v-if="currentView === 'action_plan'" onclick="window.print()" class="text-[10px] bg-white text-slate-900 font-bold px-3 py-1.5 rounded hover:bg-indigo-50 transition-colors flex items-center gap-2">
+                                    <i data-lucide="printer" class="w-3 h-3"></i> Print Plan
+                                </button>
+                                <span v-else class="text-[10px] bg-emerald-500/20 text-emerald-100 border border-emerald-500/30 px-2 py-1 rounded">System: Stable</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Executive Summary (KPIs) - ONLY SHOW ON OVERVIEW/WO/PM -->
+            <div v-if="currentView !== 'action_plan'" class="grid grid-cols-2 md:grid-cols-4 border-b border-slate-100 bg-slate-50/50">
+                <div v-for="(kpi, index) in kpis" :key="index" class="p-6 border-r border-b md:border-b-0 border-slate-100 last:border-r-0 hover:bg-slate-100/80 transition-colors cursor-default group">
+                    <div class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-3 group-hover:text-slate-500 transition-colors">{{ kpi.label }}</div>
+                    <div class="flex items-center gap-3 mb-1">
+                        <div class="w-2.5 h-2.5 rounded-full shadow-sm" :class="kpi.dotColor"></div>
+                        <span class="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight">{{ kpi.value }}</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1 font-medium">{{ kpi.desc }}</p>
+                </div>
+            </div>
+
+            <!-- Content Body -->
+            <div class="p-6 md:p-12 min-h-[500px]">
+
+                <!-- ========================================== -->
+                <!-- VIEW: WORK ORDERS & OVERVIEW               -->
+                <!-- ========================================== -->
+                <transition name="fade">
+                <div v-if="currentView === 'overview' || currentView === 'wo'" class="mb-12">
+                    <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shadow-sm">
+                            <i data-lucide="wrench" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-800">1. ข้อมูลใบแจ้งซ่อม (Work Orders)</h2>
+                            <p class="glossary-text">สถิติและสถานะงานซ่อมบำรุงเชิงแก้ไข (Corrective Maintenance)</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        
+                        <!-- WO Stats Card -->
+                        <div class="bg-white border border-slate-200 rounded-xl p-6 card-shadow lg:col-span-1">
+                            <h3 class="font-semibold text-slate-700 text-sm mb-4 flex items-center gap-2">
+                                <i data-lucide="pie-chart" class="w-4 h-4 text-slate-400"></i> สถานะงาน
+                            </h3>
+                            <div class="space-y-4">
+                                <div v-for="stat in woStats" :key="stat.label" class="flex items-center justify-between p-3 rounded-lg border border-slate-50" :class="stat.bgClass">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" :class="stat.iconBg">
+                                            {{ stat.value }}
+                                        </div>
+                                        <div>
+                                            <div class="text-xs font-bold uppercase tracking-wider opacity-70">{{ stat.label }}</div>
+                                            <div class="text-[10px] opacity-60">{{ stat.subtext }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-lg font-bold">{{ stat.percent }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Company Breakdown -->
+                        <div class="bg-white border border-slate-200 rounded-xl p-6 card-shadow lg:col-span-1">
+                            <h3 class="font-semibold text-slate-700 text-sm mb-4 flex items-center gap-2">
+                                <i data-lucide="building-2" class="w-4 h-4 text-slate-400"></i> สัดส่วนตามบริษัท
+                            </h3>
+                            <div class="space-y-5">
+                                <div v-for="comp in companyBreakdown" :key="comp.name">
+                                    <div class="flex justify-between text-xs font-bold text-slate-700 mb-1.5">
+                                        <span>{{ comp.name }}</span>
+                                        <span>{{ comp.value }}%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                                        <div class="h-full rounded-full transition-all duration-1000" :class="comp.color" :style="{ width: comp.value + '%' }"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Top 5 Systems -->
+                        <div class="bg-white border border-slate-200 rounded-xl p-6 card-shadow lg:col-span-1">
+                            <h3 class="font-semibold text-slate-700 text-sm mb-4 flex items-center gap-2">
+                                <i data-lucide="list-ordered" class="w-4 h-4 text-slate-400"></i> 5 อันดับระบบแจ้งซ่อม
+                            </h3>
+                            <ul class="space-y-3">
+                                <li v-for="(sys, idx) in topSystems" :key="idx" class="flex items-center gap-3 text-sm text-slate-600">
+                                    <span class="w-5 h-5 rounded bg-slate-100 text-slate-500 flex items-center justify-center text-xs font-bold">{{ idx + 1 }}</span>
+                                    {{ sys }}
+                                </li>
+                            </ul>
+                            <div class="mt-4 p-3 bg-slate-50 rounded border border-slate-100 text-xs text-slate-500 leading-relaxed">
+                                <strong class="text-slate-700">Note:</strong> งานส่วนใหญ่เป็นระบบแมคคานิคและอะไหล่พัดลมที่เสื่อมสภาพตามอายุการใช้งาน
+                            </div>
+                        </div>
+
+                        <!-- In Progress Details (Full Width) -->
+                        <div class="bg-white border border-slate-200 rounded-xl p-6 card-shadow lg:col-span-3">
+                            <h3 class="font-semibold text-slate-700 text-sm mb-4 flex items-center gap-2">
+                                <i data-lucide="clock" class="w-4 h-4 text-amber-500"></i> งานที่กำลังดำเนินการ (In Progress)
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div v-for="job in inProgressJobs" :key="job.site" class="flex gap-4 p-4 rounded-lg border border-amber-100 bg-amber-50/30">
+                                    <div class="mt-1">
+                                        <div class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]"></div>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-800 text-sm">{{ job.site }}</h4>
+                                        <p class="text-xs text-slate-600 mt-1 mb-2">{{ job.issue }}</p>
+                                        <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wide bg-white border border-amber-200 text-amber-700">
+                                            <i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i> {{ job.status }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                </transition>
+
+                <!-- ========================================== -->
+                <!-- VIEW: PM CHECK & OVERVIEW                  -->
+                <!-- ========================================== -->
+                <transition name="fade">
+                <div v-if="currentView === 'overview' || currentView === 'pm'">
+                    <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 shadow-sm">
+                            <i data-lucide="clipboard-check" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-800">2. การตรวจเช็คตามแผน (Preventive Maintenance)</h2>
+                            <p class="glossary-text">ผลการตรวจสอบบำรุงรักษาเชิงป้องกันประจำเดือน</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                        
+                        <!-- PM Stats (Summary) -->
+                        <div class="lg:col-span-1 space-y-4">
+                            <div class="bg-white border border-slate-200 rounded-xl p-6 card-shadow text-center">
+                                <div class="text-xs text-slate-400 uppercase font-bold tracking-widest mb-2">Total PM</div>
+                                <div class="text-5xl font-bold text-slate-800 tracking-tight mb-2">85</div>
+                                <div class="text-[10px] bg-slate-100 text-slate-500 px-2 py-1 rounded-full inline-block">รายการตรวจเช็ค</div>
+                            </div>
+                            
+                            <div class="bg-white border border-slate-200 rounded-xl overflow-hidden card-shadow">
+                                <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-emerald-50/50">
+                                    <span class="text-xs font-bold text-emerald-700 uppercase">Normal</span>
+                                    <span class="text-lg font-bold text-emerald-600">82</span>
+                                </div>
+                                <div class="p-4 flex justify-between items-center bg-red-50/50">
+                                    <span class="text-xs font-bold text-red-700 uppercase">Abnormal</span>
+                                    <span class="text-lg font-bold text-red-600">3</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Priority List / Abnormal Items -->
+                        <div class="lg:col-span-3">
+                            <div class="bg-white border border-slate-200 rounded-xl p-6 card-shadow h-full">
+                                <h3 class="font-semibold text-slate-700 text-sm mb-4 flex items-center gap-2">
+                                    <i data-lucide="alert-triangle" class="w-4 h-4 text-red-500"></i> รายการที่ต้องให้ความสำคัญ (Priority List)
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <!-- Item 1 -->
+                                    <div class="p-4 rounded-lg border border-emerald-100 bg-emerald-50/30 hover:bg-emerald-50 transition-colors group">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <span class="text-[10px] font-bold bg-white border border-emerald-200 text-emerald-600 px-2 py-0.5 rounded shadow-sm">ซัคเซสมิลค์</span>
+                                            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
+                                        </div>
+                                        <h4 class="text-sm font-bold text-slate-800 mb-1">Refrigeration Panel</h4>
+                                        <p class="text-xs text-slate-500 mb-3">อุณหภูมิสูง (จุดต่อสายไม่ดี)</p>
+                                        <div class="text-[10px] text-emerald-700 font-medium border-t border-emerald-100 pt-2 mt-auto">
+                                            Action: แก้ไขเรียบร้อย
+                                        </div>
+                                    </div>
+
+                                    <!-- Item 2 -->
+                                    <div class="p-4 rounded-lg border border-emerald-100 bg-emerald-50/30 hover:bg-emerald-50 transition-colors group">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <span class="text-[10px] font-bold bg-white border border-emerald-200 text-emerald-600 px-2 py-0.5 rounded shadow-sm">ธนากุลพันธุ์สัตว์</span>
+                                            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
+                                        </div>
+                                        <h4 class="text-sm font-bold text-slate-800 mb-1">Crane Motor</h4>
+                                        <p class="text-xs text-slate-500 mb-3">น้ำมันซึม</p>
+                                        <div class="text-[10px] text-emerald-700 font-medium border-t border-emerald-100 pt-2 mt-auto">
+                                            Action: ปิดกาวประเก็นแล้ว
+                                        </div>
+                                    </div>
+
+                                    <!-- Item 3 -->
+                                    <div class="p-4 rounded-lg border border-red-100 bg-red-50/30 hover:bg-red-50 transition-colors group shadow-sm ring-1 ring-red-100">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <span class="text-[10px] font-bold bg-white border border-red-200 text-red-600 px-2 py-0.5 rounded shadow-sm">ลักษ์ธนากุล (GEN)</span>
+                                            <i data-lucide="alert-octagon" class="w-4 h-4 text-red-500 animate-pulse"></i>
+                                        </div>
+                                        <h4 class="text-sm font-bold text-slate-800 mb-1">Air Pump</h4>
+                                        <p class="text-xs text-slate-500 mb-3">ลูกสูบ/วาล์ว เสียหาย</p>
+                                        <div class="text-[10px] text-red-700 font-medium border-t border-red-100 pt-2 mt-auto flex items-center gap-1">
+                                            <i data-lucide="clock" class="w-3 h-3"></i> Action: รออะไหล่
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                </transition>
+
+                <!-- ========================================== -->
+                <!-- VIEW: ACTION PLAN (THEME MATCHED)          -->
+                <!-- ========================================== -->
+                <transition name="fade">
+                <div v-if="currentView === 'action_plan'">
+                    
+                    <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-3">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 shadow-sm">
+                            <i data-lucide="calendar-range" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-800">3. แผนการดำเนินงาน (Action Plan)</h2>
+                            <p class="glossary-text">แผนงานซ่อมบำรุงและโครงการประจำเดือนธันวาคม 2025</p>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Statistics for Action Plan -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 print:hidden">
+                         <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 card-shadow">
+                           <div class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Total Tasks</div>
+                           <div class="text-3xl font-bold text-slate-800 mt-1">9</div>
+                           <div class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full inline-block mt-1">รายการทั้งหมด</div>
+                         </div>
+                         <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 card-shadow">
+                           <div class="text-red-400 text-[10px] font-bold uppercase tracking-widest">Urgent</div>
+                           <div class="text-3xl font-bold text-red-600 mt-1">2</div>
+                           <div class="text-[10px] bg-red-50 text-red-600 px-2 py-0.5 rounded-full inline-block mt-1">ต้องแก้ไขทันที</div>
+                         </div>
+                         <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 card-shadow">
+                           <div class="text-amber-400 text-[10px] font-bold uppercase tracking-widest">Planned</div>
+                           <div class="text-3xl font-bold text-amber-500 mt-1">5</div>
+                           <div class="text-[10px] bg-amber-50 text-amber-600 px-2 py-0.5 rounded-full inline-block mt-1">อยู่ในแผน</div>
+                         </div>
+                         <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 card-shadow">
+                           <div class="text-emerald-400 text-[10px] font-bold uppercase tracking-widest">Completed</div>
+                           <div class="text-3xl font-bold text-emerald-600 mt-1">2</div>
+                           <div class="text-[10px] bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full inline-block mt-1">เสร็จสิ้นแล้ว</div>
+                         </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                        <!-- Section 1: SA Farm -->
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden card-shadow">
+                            <!-- Header with Top Border -->
+                            <div class="border-t-4 border-blue-500 px-6 py-4 flex justify-between items-start border-b border-slate-100">
+                                <div>
+                                    <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                        <i data-lucide="map-pin" class="w-4 h-4 text-blue-500"></i>
+                                        เอส.เอ. แดรี่ฟาร์ม (SA Farm)
+                                    </h2>
+                                    <div class="flex items-center gap-1.5 text-xs text-slate-500 mt-1">
+                                        <i data-lucide="calendar" class="w-3 h-3"></i>
+                                        <span>เข้าหน้างาน: 10 ธ.ค. 2025</span>
+                                    </div>
+                                </div>
+                                <button @click="toggleSection('sa-farm')" class="text-slate-400 hover:text-slate-600">
+                                    <i :data-lucide="expandedSections['sa-farm'] ? 'chevron-up' : 'chevron-down'" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                            
+                            <div v-show="expandedSections['sa-farm']" class="divide-y divide-slate-100">
+                                 <!-- Task 1 -->
+                                 <div class="p-5 hover:bg-slate-50 transition-colors">
+                                   <div class="flex flex-col gap-2">
+                                     <div class="flex items-start justify-between">
+                                         <div>
+                                            <div class="flex items-center gap-2 mb-1">
+                                                <h3 class="font-bold text-slate-800 text-sm">แก้ไขปั๊มน้ำนม (LEROY SOMER)</h3>
+                                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-50 text-red-600 border border-red-100">Urgent</span>
+                                            </div>
+                                            <p class="text-slate-600 text-xs leading-relaxed">
+                                                เจาะท่อขาออก 1.5", ติดตั้งวาล์ว และหรี่วาล์วคุมกระแส 4-6 A
+                                            </p>
+                                         </div>
+                                         <div class="text-right min-w-[80px]">
+                                            <div class="text-[10px] uppercase font-bold text-slate-400">Status</div>
+                                            <div class="text-xs font-semibold text-slate-700">เตรียมอะไหล่</div>
+                                         </div>
+                                     </div>
+                                   </div>
+                                 </div>
+
+                                 <!-- Task 2 -->
+                                 <div class="p-5 hover:bg-slate-50 transition-colors">
+                                   <div class="flex flex-col gap-2">
+                                     <div class="flex items-start justify-between">
+                                         <div>
+                                            <div class="flex items-center gap-2 mb-1">
+                                                <h3 class="font-bold text-slate-800 text-sm">แก้ไขลูกลอยแทงค์น้ำ</h3>
+                                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-600 border border-amber-100">Medium</span>
+                                            </div>
+                                            <p class="text-slate-600 text-xs leading-relaxed">
+                                                เปลี่ยน/ซ่อมแซมลูกลอย จำนวน 4 ถัง
+                                            </p>
+                                         </div>
+                                         <div class="text-right min-w-[80px]">
+                                            <div class="text-[10px] uppercase font-bold text-slate-400">Status</div>
+                                            <div class="text-xs font-semibold text-slate-700">รอเข้าทำ</div>
+                                         </div>
+                                     </div>
+                                   </div>
+                                 </div>
+
+                                 <!-- Task 3 -->
+                                 <div class="p-5 hover:bg-slate-50 transition-colors">
+                                   <div class="flex flex-col gap-2">
+                                     <div class="flex items-start justify-between">
+                                         <div>
+                                            <div class="flex items-center gap-2 mb-1">
+                                                <h3 class="font-bold text-slate-800 text-sm">ตรวจเช็คระบบไฟฟ้าโรงรีด</h3>
+                                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-600 border border-amber-100">Medium</span>
+                                            </div>
+                                            <p class="text-slate-600 text-xs leading-relaxed">
+                                                ตรวจสอบความปลอดภัยและประสิทธิภาพระบบไฟ
+                                            </p>
+                                         </div>
+                                         <div class="text-right min-w-[80px]">
+                                            <div class="text-[10px] uppercase font-bold text-slate-400">Status</div>
+                                            <div class="text-xs font-semibold text-slate-700">รอเข้าทำ</div>
+                                         </div>
+                                     </div>
+                                   </div>
+                                 </div>
+
+                                 <!-- Task 4 -->
+                                 <div class="p-5 hover:bg-slate-50 transition-colors">
+                                   <div class="flex flex-col gap-2">
+                                     <div class="flex items-start justify-between">
+                                         <div>
+                                            <div class="flex items-center gap-2 mb-1">
+                                                <h3 class="font-bold text-slate-800 text-sm">เก็บงานแสงสว่าง & คู่มือ</h3>
+                                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-600 border border-blue-100">Normal</span>
+                                            </div>
+                                            <p class="text-slate-600 text-xs leading-relaxed">
+                                                ติดตั้งโคมไฟส่วนที่เหลือ และศึกษาหน้างานทำคู่มือ DeLaval
+                                            </p>
+                                         </div>
+                                         <div class="text-right min-w-[80px]">
+                                            <div class="text-[10px] uppercase font-bold text-slate-400">Status</div>
+                                            <div class="text-xs font-semibold text-slate-700">Plan</div>
+                                         </div>
+                                     </div>
+                                   </div>
+                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Success Milk -->
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden card-shadow">
+                            <!-- Header with Top Border -->
+                            <div class="border-t-4 border-purple-500 px-6 py-4 flex justify-between items-start border-b border-slate-100">
+                                <div>
+                                    <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                        <i data-lucide="map-pin" class="w-4 h-4 text-purple-500"></i>
+                                        ซัคเซสมิลค์ (SM)
+                                    </h2>
+                                    <div class="flex items-center gap-1.5 text-xs text-slate-500 mt-1">
+                                        <i data-lucide="calendar" class="w-3 h-3"></i>
+                                        <span>เข้าหน้างาน: 15-19 ธ.ค. 2025</span>
+                                    </div>
+                                </div>
+                                <button @click="toggleSection('sm')" class="text-slate-400 hover:text-slate-600">
+                                    <i :data-lucide="expandedSections['sm'] ? 'chevron-up' : 'chevron-down'" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                            
+                            <div v-show="expandedSections['sm']" class="divide-y divide-slate-100">
+                                 <!-- Task 1 -->
+                                 <div class="p-5 hover:bg-slate-50 transition-colors">
+                                   <div class="flex flex-col gap-2">
+                                     <div class="flex items-start justify-between">
+                                         <div>
+                                            <div class="flex items-center gap-2 mb-1">
+                                                <h3 class="font-bold text-slate-800 text-sm">เปลี่ยนขา Load Cell (3 ขา)</h3>
+                                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-50 text-red-600 border border-red-100">Urgent</span>
+                                            </div>
+                                            <p class="text-slate-600 text-xs leading-relaxed">
+                                                เปลี่ยนเป็นสแตนเลส (ของเดิมเป็นสนิม)
+                                            </p>
+                                         </div>
+                                         <div class="text-right min-w-[80px]">
+                                            <div class="text-[10px] uppercase font-bold text-slate-400">Status</div>
+                                            <div class="text-xs font-semibold text-orange-600">รออะไหล่</div>
+                                         </div>
+                                     </div>
+                                   </div>
+                                 </div>
+
+                                 <!-- Task 2 -->
+                                 <div class="p-5 hover:bg-slate-50 transition-colors">
+                                   <div class="flex flex-col gap-2">
+                                     <div class="flex items-start justify-between">
+                                         <div>
+                                            <div class="flex items-center gap-2 mb-1">
+                                                <h3 class="font-bold text-slate-800 text-sm">แก้ไขรางระบายน้ำ</h3>
+                                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-600 border border-amber-100">Medium</span>
+                                            </div>
+                                            <p class="text-slate-600 text-xs leading-relaxed">
+                                                เข้าประเมินหน้างาน 10-12 ธ.ค. เพื่อวางแผนปรับปรุง
+                                            </p>
+                                         </div>
+                                         <div class="text-right min-w-[80px]">
+                                            <div class="text-[10px] uppercase font-bold text-slate-400">Status</div>
+                                            <div class="text-xs font-semibold text-slate-700">Plan</div>
+                                         </div>
+                                     </div>
+                                   </div>
+                                 </div>
+
+                                 <!-- Task 3 (Done) -->
+                                 <div class="p-5 bg-slate-50/50">
+                                   <div class="flex flex-col gap-2">
+                                     <div class="flex items-start justify-between opacity-75">
+                                         <div>
+                                            <div class="flex items-center gap-2 mb-1">
+                                                <h3 class="font-bold text-slate-800 text-sm line-through decoration-slate-400">น้ำหยดห้องลงข้อมูล</h3>
+                                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-100">Done</span>
+                                            </div>
+                                            <p class="text-slate-600 text-xs leading-relaxed">
+                                                ตรวจสอบแล้วไม่พบรอยรั่วซ้ำ
+                                            </p>
+                                         </div>
+                                         <div class="text-right min-w-[80px]">
+                                            <div class="text-[10px] uppercase font-bold text-slate-400">Status</div>
+                                            <div class="text-xs font-bold text-emerald-600">Closed</div>
+                                         </div>
+                                     </div>
+                                   </div>
+                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Admin & PM Section -->
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden card-shadow">
+                            <div class="border-t-4 border-orange-400 px-6 py-4 border-b border-slate-100">
+                                <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                    <i data-lucide="users" class="w-4 h-4 text-orange-400"></i>
+                                    Admin & PM
+                                </h2>
+                            </div>
+                            <div class="p-6 space-y-5">
+                                <div class="flex gap-3">
+                                    <div class="mt-1"><i data-lucide="check-circle-2" class="w-4 h-4 text-orange-400"></i></div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-slate-800">งานบำรุงรักษา (PM)</h4>
+                                        <p class="text-xs text-slate-600 mt-1">ตรวจเช็คเครื่องจักรตามรอบ (เข้าพร้อมงานซ่อม 10 ธ.ค.)</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3 pt-4 border-t border-slate-50">
+                                    <div class="mt-1"><i data-lucide="trending-up" class="w-4 h-4 text-orange-400"></i></div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-slate-800">Training พนักงาน</h4>
+                                        <div class="text-xs text-slate-600 mt-1 space-y-1">
+                                            <p>• การใช้งานถังนม 3000L</p>
+                                            <p>• การตรวจเช็คลิตร (อบรมหน้างาน)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Supplementary Section -->
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden card-shadow">
+                            <div class="border-t-4 border-emerald-500 px-6 py-4 border-b border-slate-100">
+                                <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                    <i data-lucide="wrench" class="w-4 h-4 text-emerald-500"></i>
+                                    งานฝาก/ประเมินราคา
+                                </h2>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="text-xs font-bold text-slate-500 uppercase">Project</span>
+                                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">Repair</span>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-800 mb-2">เครื่องสับ (Chopping Machine) @ SM</h3>
+                                <div class="bg-slate-50 rounded p-3 mb-4 border border-slate-100">
+                                    <ul class="text-xs text-slate-600 space-y-1 list-disc list-inside">
+                                        <li>กล่องกันน้ำพลาสติก (คุมไฟ)</li>
+                                        <li>เฟืองตัวใหญ่ (13 ฟัน)</li>
+                                        <li>ล้อพร้อมกระทะ (2 ล้อ)</li>
+                                    </ul>
+                                </div>
+                                <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+                                    <span class="text-xs text-slate-500">งบประมาณ</span>
+                                    <span class="text-base font-bold text-emerald-600">฿2,350 - 2,900</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                </transition>
+
+            </div>
+
+            <!-- Footer -->
+            <footer class="bg-white border-t border-slate-100 p-6 md:p-8 text-center text-xs text-slate-400">
+                <p>เอกสารสรุปผลการดำเนินงานประจำเดือน | Generated by Maintenance Dept System</p>
+                <p class="mt-1 opacity-60">Last Updated: {{ new Date().toLocaleDateString('th-TH') }}</p>
+            </footer>
+
         </div>
-    </header>
+    </div>
 
-    <main class="container mx-auto max-w-5xl p-4 sm:px-6 lg:px-8 py-8">
-        
-        
-        <section class="mb-10">
-            <h2 class="text-2xl font-semibold mb-4 text-slate-700 border-b pb-2 border-slate-300">
-                1. สรุปข้อมูลใบแจ้งซ่อม (Work Orders)
-            </h2>
+    <script>
+        const { createApp } = Vue;
 
-            
-            <h3 class="text-xl font-semibold text-slate-600 mb-3">1.1 ภาพรวมและตัวชี้วัดหลัก (KPIs)</h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div class="bg-white p-4 rounded-lg shadow border-l-4 border-indigo-500">
-                    <h4 class="text-sm font-semibold text-slate-500 uppercase">งานซ่อมทั้งหมด</h4>
-                    <p class="text-3xl font-bold text-slate-900">37</p>
-                </div>
-                <div class="bg-white p-4 rounded-lg shadow border-l-4 border-green-600">
-                    <h4 class="text-sm font-semibold text-slate-500 uppercase">ปิดงาน (Closed)</h4>
-                    <p class="text-3xl font-bold text-green-600">35 <span class="text-lg text-slate-500">(94.59%)</span></p>
-                </div>
-                <div class="bg-white p-4 rounded-lg shadow border-l-4 border-yellow-500">
-                    <h4 class="text-sm font-semibold text-slate-500 uppercase">กำลังซ่อม (In Progress)</h4>
-                    <p class="text-3xl font-bold text-yellow-600">2 <span class="text-lg text-slate-500">(5.41%)</span></p>
-                </div>
-                <div class="bg-white p-4 rounded-lg shadow border-l-4 border-slate-400">
-                    <h4 class="text-sm font-semibold text-slate-500 uppercase">รอรับงาน (Pending)</h4>
-                    <p class="text-3xl font-bold text-slate-900">0</p>
-                </div>
-            </div>
-
-            
-            <h3 class="text-xl font-semibold text-slate-600 mb-3">1.2 รายละเอียดงานคงค้าง (In Progress Details)</h3>
-            <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
-                <p class="text-slate-600 mb-3">สำหรับงานที่กำลังดำเนินการ 2 รายการ เป็นงานที่ต้องใช้เวลาและมีการวางแผนต่อเนื่อง ได้แก่:</p>
-                <ul class="list-disc list-inside space-y-2 text-slate-700">
-                    <li><b>โรงเรือน 4:</b> กำลังเร่งดำเนินการซ่อมแซม คาดว่าจะแล้วเสร็จโดยเร็ว</li>
-                    <li><b>โรงเรือน 9:</b> อยู่ในแผนที่จะเข้าไปเก็บงานต่อทันทีหลังจากจบงานที่โรงเรือน 4</li>
-                    <li><b>โรงเรือน 2:</b> เข้าดำเนินการต่อโรงเรือน 9</li>
-                </ul>
-            </div>
-
-            
-            <h3 class="text-xl font-semibold text-slate-600 mb-3">1.3 สัดส่วนและแนวโน้มการแจ้งซ่อม</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
-                <div class="bg-white p-6 rounded-lg shadow-lg">
-                    <h4 class="text-lg font-semibold mb-3 text-slate-800">สัดส่วนตามบริษัท</h4>
-                    <p class="text-sm text-slate-500 mb-3">การแจ้งซ่อมส่วนใหญ่มาจาก บริษัท ลักษณ์ธนากุล จำกัด</p>
-                    <ul class="list-inside space-y-2">
-                        <li class="flex justify-between"><span>บริษัท ลักษณ์ธนากุล จำกัด:</span> <span class="font-semibold">62.2%</span></li>
-                        <li class="flex justify-between"><span>บริษัท ธนากุลพันธุ์สัตว์ จำกัด:</span> <span class="font-semibold">21.6%</span></li>
-                        <li class="flex justify-between"><span>บริษัท เอส.เอ. แดรี่ฟาร์ม จำกัด:</span> <span class="font-semibold">10.8%</span></li>
-                        <li class="flex justify-between"><span>บริษัท ซัคเซสมิลค์ จำกัด:</span> <span class="font-semibold">5.4%</span></li>
-                    </ul>
-                </div>
-
-                
-                <div class="bg-white p-6 rounded-lg shadow-lg">
-                    <h4 class="text-lg font-semibold mb-3 text-slate-800">5 อันดับระบบที่มีการแจ้งซ่อมสูงสุด</h4>
-                    <ol class="list-decimal list-inside space-y-2 text-slate-700">
-                        <li class="font-medium">Biosecurity System</li>
-                        <li class="font-medium">Lighting System</li>
-                        <li class="font-medium">Water System</li>
-                        <li class="font-medium">Accessory (อุปกรณ์อื่นๆทั่วไป)</li>
-                        <li class="font-medium">Feeding System</li>
-                    </ol>
-                </div>
-            </div>
-        </section>
-
-        
-        <section>
-            <h2 class="text-2xl font-semibold mb-4 text-slate-700 border-b pb-2 border-slate-300">
-                2. สรุปผลการตรวจเช็คตามแผน (Preventive Maintenance - PM)
-            </h2>
-
-            
-            <h3 class="text-xl font-semibold text-slate-600 mb-3">2.1 ภาพรวมและตัวชี้วัดหลัก (KPIs)</h3>
-            <p class="text-slate-600 mb-3">ในเดือนนี้ ฝ่ายซ่อมบำรุงได้เพิ่มการเข้าตรวจเช็ค PM ตามแผนมากขึ้น 33 รายการเมื่อเทียบกับเดือนก่อนหน้า</p>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div class="bg-white p-4 rounded-lg shadow border-l-4 border-indigo-500">
-                    <h4 class="text-sm font-semibold text-slate-500 uppercase">งาน PM ทั้งหมด</h4>
-                    <p class="text-3xl font-bold text-slate-900">130</p>
-                </div>
-                <div class="bg-white p-4 rounded-lg shadow border-l-4 border-green-600">
-                    <h4 class="text-sm font-semibold text-slate-500 uppercase">สถานะ ปกติ</h4>
-                    <p class="text-3xl font-bold text-green-600">124 <span class="text-lg text-slate-500">(95.38%)</span></p>
-                </div>
-                <div class="bg-white p-4 rounded-lg shadow border-l-4 border-yellow-500">
-                    <h4 class="text-sm font-semibold text-slate-500 uppercase">สถานะ เฝ้าระวัง</h4>
-                    <p class="text-3xl font-bold text-yellow-600">1 <span class="text-lg text-slate-500">(0.77%)</span></p>
-                </div>
-                <div class="bg-white p-4 rounded-lg shadow border-l-4 border-red-600">
-                    <h4 class="text-sm font-semibold text-slate-500 uppercase">สถานะ ผิดปกติ</h4>
-                    <p class="text-3xl font-bold text-red-600">5 <span class="text-lg text-slate-500">(3.85%)</span></p>
-                </div>
-            </div>
-
-            
-            <h3 class="text-xl font-semibold text-slate-600 mb-3">2.2 รายการที่ต้องให้ความสำคัญ (Priority List)</h3>
-            <p class="text-slate-600 mb-4">จากการตรวจเช็ค PM พบรายการที่ต้องติดตามอย่างเร่งด่วน 6 รายการ (ผิดปกติ 4 รายการ และเฝ้าระวัง 1 รายการ) โดยมีรายละเอียดดังนี้:</p>
-            
-            <div class="space-y-4">
-                
-                <div class="p-4 rounded-lg border-l-4 border-red-500 bg-red-50 shadow-sm">
-                    <span class="px-3 py-1 text-xs font-bold text-white bg-red-500 rounded-full">ผิดปกติ</span>
-                    <h4 class="font-semibold text-lg text-slate-900 mt-2">บริษัท ซัคเซสมิลค์ จำกัด (2 รายการ)</h4>
-                    <ul class="list-disc list-inside mt-2 text-slate-700 space-y-1">
-                        <li><b>Refrigeration:</b> Control Panel-อุณหภูมิอุปกรณ์สูง</li>
-                        <li><b>Cleaning In Place (CIP):</b> Control Panel-ตัวควบคุมอุณหภูมิ Heater 6 เสีย</li>
-                    </ul>
-                    <p class="mt-2 text-sm font-medium text-slate-600"><span class="font-bold">การดำเนินการ:</span> ได้แก้ไขเรียบร้อยแล้ว อยู่ระหว่างการติดตาม</p>
-                </div>
-                
-                
-                <div class="p-4 rounded-lg border-l-4 border-yellow-500 bg-yellow-50 shadow-sm">
-                    <span class="px-3 py-1 text-xs font-bold text-slate-900 bg-yellow-400 rounded-full">เฝ้าระวัง</span>
-                    <h4 class="font-semibold text-lg text-slate-900 mt-2">บริษัท ซัคเซสมิลค์ จำกัด (1 รายการ)</h4>
-                    <ul class="list-disc list-inside mt-2 text-slate-700 space-y-1">
-                        <li><b>Generator (ห้องGEN):</b> Generator-AGG-C200D5...</li>
-                    </ul>
-                    <p class="mt-2 text-sm font-medium text-slate-600"><span class="font-bold">ปัญหา:</span> ตรวจพบขี้เกลือขึ้นบริเวณขั้วแบตเตอรี่</D>
-                    <p class="mt-1 text-sm font-medium text-slate-600"><span class="font-bold">การดำเนินการ:</span> ได้ทำความสะอาดและตรวจสอบเพื่อป้องกันปัญหาการสตาร์ทในอนาคต</p>
-                </div>
-
-                
-                <div class="p-4 rounded-lg border-l-4 border-red-500 bg-red-50 shadow-sm">
-                    <span class="px-3 py-1 text-xs font-bold text-white bg-red-500 rounded-full">ผิดปกติ</span>
-                    <h4 class="font-semibold text-lg text-slate-900 mt-2">บริษัท ลักษณ์ธนากุล จำกัด (2 รายการ)</h4>
-                    <ul class="list-disc list-inside mt-2 text-slate-700 space-y-1">
-                        <li><b>Fire Protection (บ้านพักหัวหน้างาน):</b> ถังดับเพลิง 1-ชนิดผงเคมีแห้ง 15 ปอนด์</li>
-                        <li><b>Fire Protection (โรงเรือน1):</b> ถังดับเพลิง 1-ชนิดผงเคมีแห้ง 10 ปอนด์</li>
-                    </ul>
-                    <p class="mt-2 text-sm font-medium text-slate-600"><span class="font-bold">ปัญหา:</span> ตรวจพบถังดับเพลิงมีแรงดัน (เกจ) ตก ทั้ง 2 จุด</p>
-                    <p class="mt-1 text-sm font-medium text-slate-600"><span class="font-bold">การดำเนินการ:</span> ดำเนินการแจ้ง จป.วิชาชีพ</p>
-                </div>
-            </div>
-
-        </section>
-
-    </main>
-
-    <footer class="text-center py-6 mt-10 border-t border-slate-200">
-        <p class="text-sm text-slate-500">Maintenance Department Report | October 2025</p>
-    </footer>
-
+        createApp({
+            data() {
+                return {
+                    currentView: 'overview',
+                    reportMonth: 'พฤศจิกายน 2025',
+                    expandedSections: {
+                        'sa-farm': true,
+                        'sm': true
+                    },
+                    kpis: [
+                        { label: 'Total Work Orders', value: '60', desc: '+22 จากเดือนก่อน', dotColor: 'bg-indigo-500' },
+                        { label: 'Closed Rate', value: '96.67%', desc: 'ปิดงาน 58 รายการ', dotColor: 'bg-emerald-500' },
+                        { label: 'PM Completion', value: '100%', desc: 'ตรวจเช็คครบ 85 จุด', dotColor: 'bg-blue-500' },
+                        { label: 'Issues Found', value: '3 Items', desc: 'รายการผิดปกติ PM', dotColor: 'bg-red-500 animate-pulse' }
+                    ],
+                    woStats: [
+                        { label: 'Closed', subtext: 'ปิดงานเรียบร้อย', value: '58', percent: '96.7%', bgClass: 'bg-emerald-50/50 border-emerald-100 text-emerald-800', iconBg: 'bg-emerald-100 text-emerald-600' },
+                        { label: 'In Progress', subtext: 'กำลังดำเนินการ', value: '2', percent: '3.3%', bgClass: 'bg-amber-50/50 border-amber-100 text-amber-800', iconBg: 'bg-amber-100 text-amber-600' },
+                        { label: 'Pending', subtext: 'รอรับงาน', value: '0', percent: '0%', bgClass: 'bg-slate-50 border-slate-100 text-slate-400', iconBg: 'bg-slate-200 text-slate-500' }
+                    ],
+                    companyBreakdown: [
+                        { name: 'บ.ลักษ์ธนากุล', value: 48.3, color: 'bg-indigo-600' },
+                        { name: 'บ.ธนากุลพันธุ์สัตว์', value: 31.7, color: 'bg-blue-500' },
+                        { name: 'บ.เอส.เอ. แดรี่ฟาร์ม', value: 11.7, color: 'bg-sky-400' },
+                        { name: 'บ.ซัคเซสมิลค์', value: 8.3, color: 'bg-cyan-300' }
+                    ],
+                    topSystems: [
+                        'งานซ่อมทั่วไป (General Repair)',
+                        'Ventilation System',
+                        'Lighting System',
+                        'Feeding System',
+                        'Water System'
+                    ],
+                    inProgressJobs: [
+                        { site: 'โรงเรือน 2', issue: 'ท่ออาหารชำรุด', status: 'วางแผนเข้าทำ (กลาง ธ.ค.)' },
+                        { site: 'ห้อง GEN (ลักษ์ธนากุล)', issue: 'ปั๊มลมลูกสูบ/วาล์วเสียหาย', status: 'รออะไหล่' }
+                    ]
+                }
+            },
+            methods: {
+                toggleSection(id) {
+                    this.expandedSections[id] = !this.expandedSections[id];
+                    this.$nextTick(() => {
+                        lucide.createIcons();
+                    });
+                }
+            },
+            updated() {
+                lucide.createIcons();
+            },
+            mounted() {
+                lucide.createIcons();
+            }
+        }).mount('#app');
+    </script>
 </body>
 </html>
